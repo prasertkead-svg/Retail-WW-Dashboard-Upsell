@@ -1,0 +1,21 @@
+databases:
+  - name: retail-ww-postgres
+    databaseName: retail_ww
+    user: retail_ww
+    plan: basic-256mb
+services:
+  - type: web
+    name: retail-ww-upsell
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    plan: starter
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: retail-ww-postgres
+          property: connectionString
+      - key: ADMIN_TOKEN
+        generateValue: true
+      - key: SEED_SAMPLE
+        value: "true"
